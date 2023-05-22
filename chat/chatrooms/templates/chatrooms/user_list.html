@@ -1,0 +1,20 @@
+{% extends "chatrooms/base.html" %}
+{% load bootstrap5 %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>User List</h2>
+    <ul>
+        {% for user in users %}
+        <li><a href="{% url 'start-chat' username=user.username %}">{{ user.username }}</a></li>
+        {% empty %}
+        <li>No other users found.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% include "chatrooms/footer.html" %}
+{% endblock %}

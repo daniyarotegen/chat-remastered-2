@@ -1,0 +1,32 @@
+{% extends "chatrooms/base.html" %}
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'create_group_chat' %}">Create Group Chat</a>
+        </div>
+    </div>
+</nav>
+
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% if chats_with_recipients %}
+    {% for item in chats_with_recipients %}
+    <div>
+        <strong>Room:</strong> {{ item.recipient_names }}<br>
+        <strong>Message:</strong> {{ item.chat.content }}<br>
+        <strong>Time:</strong> {{ item.chat.timestamp }}<br>
+        <a href="{% url 'room' room_name=item.room_name %}">Go to chat</a>
+    </div>
+    <hr>
+    {% endfor %}
+    {% else %}
+    <p>No messages yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% include "chatrooms/footer.html" %}
+{% endblock %}

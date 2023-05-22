@@ -11,7 +11,9 @@
         </div>
         {% else %}
         <div class="message receiver">
+            {% if is_group_chat %}
             <small class="username">{{ chat.user.username }}</small>
+            {% endif %}
             <p class="message-text">{{ chat.content }}</p>
         </div>
         {% endif %}

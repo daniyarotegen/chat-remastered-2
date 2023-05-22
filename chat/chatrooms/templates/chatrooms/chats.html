@@ -1,8 +1,8 @@
 {% extends "chatrooms/base.html" %}
 {% load humanize %}
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+<nav class="navbar navbar-light bg-light sticky-top">
+    <div class="container-fluid d-flex justify-content-end">
         <div class="navbar-nav">
             <a class="nav-link" href="{% url 'create_group_chat' %}">Create Group Chat</a>
         </div>
@@ -21,6 +21,7 @@
             <small class="text-body-secondary">{{ item.chat.timestamp|timesince }} ago</small>
         </div>
         <p class="mb-1">{{ item.chat.content }}.</p>
+
     </a>
     {% endfor %}
     {% else %}

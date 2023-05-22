@@ -23,7 +23,7 @@
         <input class="textInput" id="chat-message-input" type="text" size="100">
         <input class="button" id="chat-message-submit" type="button" value="Send">
     </div>
-    {{ room_name|json_script:"room-name" }}
+    {{ room_id|json_script:"room-uuid" }}
     {{ is_group_chat|json_script:"is-group-chat" }}
 </div>
 {{ request.user.id|json_script:"user_id" }}

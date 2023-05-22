@@ -1,5 +1,5 @@
 const chatLog = document.querySelector('#chat-log')
-const roomName = JSON.parse(document.getElementById('room-name').textContent);
+const roomUuid = JSON.parse(document.getElementById('room-uuid').textContent);
 const isGroupChat = JSON.parse(document.getElementById('is-group-chat').textContent);
 
 if (chatLog.childNodes.length <= 1) {
@@ -14,7 +14,7 @@ const chatSocket = new WebSocket(
     'ws://'
     + window.location.host
     + '/ws/chat/'
-    + roomName
+    + roomUuid
     + '/'
 );
 
@@ -46,7 +46,7 @@ chatSocket.onclose = function(e) {
 
 document.querySelector('#chat-message-input').focus();
 document.querySelector('#chat-message-input').onkeyup = function(e) {
-    if (e.keyCode === 13) {  // enter, return
+    if (e.keyCode === 13) {
         document.querySelector('#chat-message-submit').click();
     }
 };

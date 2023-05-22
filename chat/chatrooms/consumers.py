@@ -1,4 +1,5 @@
 import json
+import uuid
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import Chat, ChatRoom
@@ -6,13 +7,13 @@ from .models import Chat, ChatRoom
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'chat_%s' % self.room_name
+        self.room_uuid = uuid.UUID(self.scope['url_route']['kwargs']['room_uuid'])
+        self.room_group_name = 'chat_%s' % self.room_uuid
 
-        self.room = await self.get_room(self.room_name)
+        self.room = await self.get_room(self.room_uuid)
 
         if self.room is None:
-            print(f"No room found with name {self.room_name}")
+            print(f"No room found with uuid {self.room_uuid}")
             return
 
         await self.channel_layer.group_add(
@@ -23,9 +24,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     @database_sync_to_async
-    def get_room(self, room_name):
+    def get_room(self, room_uuid):
         try:
-            room = ChatRoom.objects.get(name=room_name)
+            room = ChatRoom.objects.get(id=room_uuid)
             return room
         except ChatRoom.DoesNotExist:
             return None
@@ -41,7 +42,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         self.user_id = self.scope['user'].id
 
-        room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
+        room = await database_sync_to_async(ChatRoom.objects.get)(id=self.room_uuid)
 
         chat = Chat(
             content=message,

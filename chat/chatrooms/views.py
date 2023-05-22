@@ -64,8 +64,6 @@ class ChatsView(LoginRequiredMixin, View):
         return render(request, 'chatrooms/chats.html', {'chats_with_recipients': chats_with_recipients})
 
 
-
-
 class Room(LoginRequiredMixin, View):
     def get(self, request, room_uuid):
         room = ChatRoom.objects.filter(id=room_uuid).first()

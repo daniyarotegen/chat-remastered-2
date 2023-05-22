@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import GroupChatForm
 from .models import ChatRoom, Chat
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 class Index(LoginRequiredMixin, View):
@@ -20,8 +21,12 @@ class ProfileView(LoginRequiredMixin, View):
 
 class UserListView(LoginRequiredMixin, View):
     def get(self, request):
+        q = request.GET.get('q', '')
         users = User.objects.exclude(id=request.user.id)
+        if q:
+            users = users.filter(Q(username__icontains=q))
         return render(request, 'chatrooms/user_list.html', {'users': users})
+
 
 
 class StartChatView(LoginRequiredMixin, View):

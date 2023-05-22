@@ -1,10 +1,19 @@
 {% extends "chatrooms/base.html" %}
 {% load bootstrap5 %}
 {% load static %}
+{% block navbar %}
+<nav class="navbar navbar-light bg-light sticky-top">
+    <div class="container-fluid d-flex justify-content-end">
+        <form class="d-flex" method="get" action="{% url 'user-list' %}">
+            <input class="form-control me-2" type="search" name="q" placeholder="Search residents..." aria-label="Search" value="{{ request.GET.q }}">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
 
+{% endblock %}
 {% block content %}
 <div class="container">
-    <h2>Residents</h2>
     <ul class="list-group list-group-flush">
         {% for user in users %}
         <li class="list-group-item"><a href="{% url 'start-chat' username=user.username %}">{{ user.username }}</a></li>

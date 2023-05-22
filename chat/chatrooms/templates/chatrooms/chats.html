@@ -8,7 +8,6 @@
         </div>
     </div>
 </nav>
-
 {% endblock %}
 {% block content %}
 
@@ -20,7 +19,7 @@
             <h5 class="mb-1">{{ item.recipient_names }}</h5>
             <small class="text-body-secondary">{{ item.chat.timestamp|timesince }} ago</small>
         </div>
-        <p class="mb-1">{{ item.chat.content }}.</p>
+        <p class="mb-1">{{ item.chat.content }}</p>
 
     </a>
     {% endfor %}

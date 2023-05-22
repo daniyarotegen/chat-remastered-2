@@ -22,13 +22,19 @@ chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const messageElement = document.createElement('div')
     const userId = data['user_id']
+    const username = data['username']
     const loggedInUserId = JSON.parse(document.getElementById('user_id').textContent)
-    console.log(loggedInUserId)
-    messageElement.innerText = data.message
+    const messageText = document.createElement('p');
+    messageText.innerText = data.message;
+    messageElement.appendChild(messageText);
 
     if (userId === loggedInUserId) {
         messageElement.classList.add('message', 'sender')
     } else {
+        const usernameElement = document.createElement('small');
+        usernameElement.classList.add('username');
+        usernameElement.innerText = username;
+        messageElement.prepend(usernameElement);
         messageElement.classList.add('message', 'receiver')
     }
 

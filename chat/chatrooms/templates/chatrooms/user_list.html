@@ -4,17 +4,18 @@
 
 {% block content %}
 <div class="container">
-    <h2>User List</h2>
-    <ul>
+    <h2>Residents</h2>
+    <ul class="list-group list-group-flush">
         {% for user in users %}
-        <li><a href="{% url 'start-chat' username=user.username %}">{{ user.username }}</a></li>
+        <li class="list-group-item"><a href="{% url 'start-chat' username=user.username %}">{{ user.username }}</a></li>
         {% empty %}
-        <li>No other users found.</li>
+        <li class="list-group-item">No other users found.</li>
         {% endfor %}
     </ul>
 </div>
+
 {% endblock %}
 
 {% block footer %}
-    {% include "chatrooms/footer.html" %}
+{% include "chatrooms/footer.html" %}
 {% endblock %}

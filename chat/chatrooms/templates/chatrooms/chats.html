@@ -1,4 +1,5 @@
 {% extends "chatrooms/base.html" %}
+{% load humanize %}
 {% block navbar %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -10,16 +11,17 @@
 
 {% endblock %}
 {% block content %}
-<div class="container">
+
+<div class="list-group">
     {% if chats_with_recipients %}
     {% for item in chats_with_recipients %}
-    <div>
-        <strong>Room:</strong> {{ item.recipient_names }}<br>
-        <strong>Message:</strong> {{ item.chat.content }}<br>
-        <strong>Time:</strong> {{ item.chat.timestamp }}<br>
-        <a href="{% url 'room' room_uuid=item.room_id %}">Go to chat</a>
-    </div>
-    <hr>
+    <a href="{% url 'room' room_uuid=item.room_id %}" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ item.recipient_names }}</h5>
+            <small class="text-body-secondary">{{ item.chat.timestamp|timesince }} ago</small>
+        </div>
+        <p class="mb-1">{{ item.chat.content }}.</p>
+    </a>
     {% endfor %}
     {% else %}
     <p>No messages yet.</p>
@@ -28,5 +30,5 @@
 {% endblock %}
 
 {% block footer %}
-    {% include "chatrooms/footer.html" %}
+{% include "chatrooms/footer.html" %}
 {% endblock %}

@@ -10,13 +10,12 @@
 </nav>
 {% endblock %}
 {% block content %}
-
 <div class="list-group">
     {% if chats_with_recipients %}
     {% for item in chats_with_recipients %}
     <a href="{% url 'room' room_uuid=item.room_id %}" class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ item.recipient_names }}</h5>
+            <h5 class="mb-1">{{ item.chat_name }}</h5>
             <small class="text-body-secondary">{{ item.chat.timestamp|timesince }} ago</small>
         </div>
         <p class="mb-1">{{ item.chat.content }}</p>
@@ -28,7 +27,7 @@
     {% endif %}
 </div>
 {% endblock %}
-
 {% block footer %}
 {% include "chatrooms/footer.html" %}
 {% endblock %}
+

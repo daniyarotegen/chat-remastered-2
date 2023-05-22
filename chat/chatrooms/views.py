@@ -57,16 +57,17 @@ class ChatsView(LoginRequiredMixin, View):
         for room in chatrooms:
             chat = room.chat_set.order_by('-timestamp').first()
             if chat:
-                recipients = room.users.exclude(id=request.user.id)
                 if room.is_group:
-                    recipient_names = ', '.join([user.username for user in recipients.all()])
+                    chat_name = room.name
                 else:
-                    recipient_names = recipients.first().username
-                chats_with_recipients.append({'chat': chat, 'recipient_names': recipient_names,
+                    recipient = room.users.exclude(id=request.user.id).first()
+                    chat_name = recipient.username
+                chats_with_recipients.append({'chat': chat, 'chat_name': chat_name,
                                               'room_id': str(room.id)})
 
         chats_with_recipients.sort(key=lambda x: x['chat'].timestamp, reverse=True)
         return render(request, 'chatrooms/chats.html', {'chats_with_recipients': chats_with_recipients})
+
 
 
 class Room(LoginRequiredMixin, View):

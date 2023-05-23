@@ -58,6 +58,13 @@ document.querySelector('#chat-message-input').onkeyup = function(e) {
     }
 };
 
+document.querySelectorAll('.expandable').forEach(function (element) {
+    element.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+});
+
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
@@ -65,4 +72,5 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
         'message': message
     }));
     messageInputDom.value = '';
+    messageInputDom.style.height = 'auto';
 };

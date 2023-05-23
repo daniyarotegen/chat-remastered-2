@@ -44,22 +44,28 @@ a:hover {
     margin: 0 auto;
 }
 
+.expandable {
+    overflow: hidden;
+}
+
 .textInput {
-	border: none;
-	border-radius: 50px;
-	flex-grow: 1;
+    border: none;
+    border-radius: 50px;
+    flex-grow: 1;
     margin-right: 20px;
-	line-height: 1.2rem;
-	transition: 0.3s;
-	width: 70%;
-	padding: 10px 20px;
-	background-color: #f0f0f0;
+    line-height: 1.2rem;
+    transition: 0.3s;
+    width: 70%;
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    resize: none;
+    overflow: hidden;
 }
 
 .textInput:focus {
-	outline: none;
-	border-bottom: 2px solid #333;
-	transition: 0.3s;
+    outline: none;
+    border-bottom: 2px solid #333;
+    transition: 0.3s;
 }
 
 .button {
@@ -189,7 +195,7 @@ a:hover {
 }
 
 #chat-log {
-    max-height: calc(100vh - 4rem);
+    max-height: calc(80vh);
     overflow-y: auto;
     display: flex;
     flex-direction: column-reverse;

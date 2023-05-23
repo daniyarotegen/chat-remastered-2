@@ -207,3 +207,12 @@ a:hover {
     z-index: 1020;
 }
 
+.chat-list-container {
+    max-height: 33.4rem;
+    overflow-y: auto;
+}
+
+.user-list-container {
+    max-height: 33.4rem;
+    overflow-y: auto;
+}

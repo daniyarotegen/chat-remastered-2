@@ -53,24 +53,26 @@ body {
 }
 
 .button {
-	background-color: #ffffff;
-	color: #9a4ef1;
-	border: 0.16em solid #9a4ef1;
-	border-radius: 2em;
-	padding: 7px 16px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	cursor: pointer;
-	transition: 0.3s;
-	width: auto;
+    background-color: #007BFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 40px;
+    height: 40px;
 }
 
 .button:hover {
-	background-color: #9a4ef1;
-	color: #ffffff;
-	transition: 0.3s;
+    background-color: #0056b3;
+    transition: 0.3s;
+}
+
+.button svg {
+    fill: #ffffff;
 }
 
 .emptyText {

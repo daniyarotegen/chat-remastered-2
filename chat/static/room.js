@@ -25,6 +25,7 @@ chatSocket.onmessage = function(e) {
     const username = data['username']
     const loggedInUserId = JSON.parse(document.getElementById('user_id').textContent)
     const messageText = document.createElement('p');
+
     messageText.innerText = data.message;
     messageElement.appendChild(messageText);
 

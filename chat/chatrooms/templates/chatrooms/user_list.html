@@ -2,29 +2,29 @@
 {% load bootstrap5 %}
 {% load static %}
 {% block navbar %}
-<nav class="navbar navbar-light bg-light sticky-top">
+<nav class="navbar navbar-light bg-light sticky-top navbar-contacts">
     <div class="container-fluid d-flex justify-content-end">
         <form class="d-flex" method="get" action="{% url 'user-list' %}">
-            <input class="form-control me-2" type="search" name="q" placeholder="Search residents..." aria-label="Search" value="{{ request.GET.q }}">
+            <input class="form-control me-2" type="search" name="q" placeholder="Search residents..."
+                   aria-label="Search" value="{{ request.GET.q }}">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
     </div>
 </nav>
-
 {% endblock %}
 {% block content %}
-<div class="container">
-    <ul class="list-group list-group-flush">
-        {% for user in users %}
-        <li class="list-group-item"><a href="{% url 'start-chat' username=user.username %}">{{ user.username }}</a></li>
-        {% empty %}
-        <li class="list-group-item">No other users found.</li>
-        {% endfor %}
-    </ul>
+<div class="list-group">
+    {% for user in users %}
+    <a href="{% url 'start-chat' username=user.username %}" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ user.username }}</h5>
+        </div>
+    </a>
+    {% empty %}
+    <li class="list-group-item">No other users found.</li>
+    {% endfor %}
 </div>
-
 {% endblock %}
-
 {% block footer %}
 {% include "chatrooms/footer.html" %}
 {% endblock %}

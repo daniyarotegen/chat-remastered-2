@@ -1,6 +1,15 @@
 {% extends "chatrooms/base.html" %}
 {% load bootstrap5 %}
 {% load static %}
+{% block navbar %}
+<nav class="navbar navbar-light bg-light sticky-top navbar-room">
+    <div class="container-fluid d-flex justify-content-end">
+        <div class="navbar-nav">
+            <a class="nav-link" href="#">Other User</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
 {% block content %}
 <div class="container-fluid">
     <div id="chat-log">

@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from chatrooms.views import ProfileView, UserListView, ChatsView, CreateGroupChatView, calendar_view
+from chatrooms.views import ProfileView, UserListView, ChatsView, CreateGroupChatView, calendar_view, FileUploadView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +30,5 @@ urlpatterns = [
     path('create_group_chat/', CreateGroupChatView.as_view(), name='create_group_chat'),
     path('polls/', include('polls.urls')),
     path('calendar/', calendar_view, name='calendar'),
-]
+    path('upload/<uuid:room_uuid>/', FileUploadView.as_view(), name='file-upload'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

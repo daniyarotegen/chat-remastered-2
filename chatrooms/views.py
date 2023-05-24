@@ -1,10 +1,15 @@
-from django.http import HttpResponse
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import GroupChatForm
+from django.views.decorators.csrf import csrf_exempt
+
+from .forms import GroupChatForm, FileForm
 from .models import ChatRoom, Chat
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -82,9 +87,11 @@ class Room(LoginRequiredMixin, View):
             return HttpResponse("Room not found", status=404)
 
         chats = Chat.objects.filter(room=room).order_by('-timestamp')
+        form = FileForm()
 
         return render(request, 'chatrooms/room.html',
-                      {'room_name': room.name, 'room_id': str(room.id), 'chats': chats, 'is_group_chat': room.is_group})
+                      {'room_name': room.name, 'room_id': str(room.id), 'chats': chats, 'is_group_chat': room.is_group,
+                       'form': form})
 
 
 class CreateGroupChatView(LoginRequiredMixin, View):
@@ -114,3 +121,27 @@ class CreateGroupChatView(LoginRequiredMixin, View):
 
 def calendar_view(request):
     return render(request, 'chatrooms/calendar.html')
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class FileUploadView(LoginRequiredMixin, View):
+    def post(self, request, room_uuid):
+        form = FileForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_file = form.save(commit=False)
+            new_file.user = request.user
+            new_file.chat_room = ChatRoom.objects.get(id=room_uuid)
+            new_file.save()
+
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f'chat_{room_uuid}',
+                {
+                    'type': 'file.upload',
+                    'file_url': new_file.file.url,
+                    'user_id': request.user.id,
+                }
+            )
+            return JsonResponse({'file_url': new_file.file.url})
+        else:
+            return JsonResponse({'error': 'Invalid form'}, status=400)

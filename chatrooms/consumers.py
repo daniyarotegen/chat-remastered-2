@@ -68,3 +68,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message': message,
             'user_id': user_id
         }))
+
+    async def file_upload(self, event):
+        file_url = event['file_url']
+        user_id = event['user_id']
+
+        await self.send(text_data=json.dumps({
+            'message': f'A file has been uploaded: {file_url}',
+            'user_id': user_id,
+        }))

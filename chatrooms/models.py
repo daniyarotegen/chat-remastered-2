@@ -39,3 +39,10 @@ class ChatRoomMembership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class File(models.Model):
+    file = models.FileField(upload_to='uploads/')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)

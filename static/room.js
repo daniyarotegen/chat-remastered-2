@@ -1,6 +1,21 @@
 const chatLog = document.querySelector('#chat-log')
 const roomUuid = JSON.parse(document.getElementById('room-uuid').textContent);
 const isGroupChat = JSON.parse(document.getElementById('is-group-chat').textContent);
+const picker = document.querySelector('#emoji-picker');
+const emojiButton = document.querySelector('#emoji-button');
+
+emojiButton.addEventListener('click', () => {
+    if (picker.style.display === 'none') {
+        picker.style.display = 'block';
+    } else {
+        picker.style.display = 'none';
+    }
+});
+
+picker.addEventListener('emoji-click', event => {
+    const messageInputDom = document.querySelector('#chat-message-input');
+    messageInputDom.value += event.detail.emoji.unicode;
+});
 
 if (chatLog.childNodes.length <= 1) {
     const emptyText = document.createElement('h3')

@@ -1,0 +1,7 @@
+{% load bootstrap5 %}
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="text" name="options" placeholder="Option text">
+    <input type="submit" value="Create Poll">
+</form>

@@ -1,5 +1,5 @@
 {% extends "chatrooms/base.html" %}
-{% load humanize %}
+{% load humanize custom_filters %}
 {% block navbar %}
 <nav class="navbar navbar-light bg-light sticky-top">
     <div class="container-fluid d-flex justify-content-end">
@@ -17,9 +17,14 @@
         <a href="{% url 'room' room_uuid=item.room_id %}" class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{ item.chat_name }}</h5>
-                <small class="text-body-secondary">{{ item.chat.timestamp|timesince }} ago</small>
+                {% if item.chat %}
+                <small class="text-body-secondary">{{ item.chat.timestamp|custom_timesince }}</small>
             </div>
             <p class="mb-1">{{ item.chat.content }}</p>
+            {% else %}
+            </div>
+            <p class="mb-1" style="font-style: italic; color: grey;">No messages yet...</p>
+            {% endif %}
         </a>
         {% endfor %}
         {% else %}
@@ -31,4 +36,3 @@
 {% block footer %}
 {% include "chatrooms/footer.html" %}
 {% endblock %}
-

@@ -3,9 +3,15 @@
 {% load static %}
 {% block navbar %}
 <nav class="navbar navbar-light bg-light sticky-top navbar-room">
-    <div class="container-fluid d-flex justify-content-end">
+    <div class="container-fluid d-flex justify-content-between">
+        <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'chats' %}">< Back</a>
+        </div>
         <div class="navbar-nav">
             <a class="nav-link" href="#">Other User</a>
+        </div>
+        <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'create_poll' room_id %}">Create a Poll</a>
         </div>
     </div>
 </nav>

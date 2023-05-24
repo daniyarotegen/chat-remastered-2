@@ -41,6 +41,7 @@ AUTHENTICATION_BACKENDS = [
 INSTALLED_APPS = [
     'channels',
     'chatrooms',
+    'polls',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

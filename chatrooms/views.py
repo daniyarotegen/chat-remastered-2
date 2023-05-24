@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import GroupChatForm
@@ -26,7 +27,6 @@ class UserListView(LoginRequiredMixin, View):
         if q:
             users = users.filter(Q(username__icontains=q))
         return render(request, 'chatrooms/user_list.html', {'users': users})
-
 
 
 class StartChatView(LoginRequiredMixin, View):
@@ -56,18 +56,23 @@ class ChatsView(LoginRequiredMixin, View):
         chats_with_recipients = []
         for room in chatrooms:
             chat = room.chat_set.order_by('-timestamp').first()
-            if chat:
-                if room.is_group:
-                    chat_name = room.name
+            if room.is_group:
+                chat_name = room.name
+                if chat:
+                    chats_with_recipients.append({'chat': chat, 'chat_name': chat_name,
+                                                  'room_id': str(room.id)})
                 else:
+                    chats_with_recipients.append({'chat': None, 'chat_name': chat_name,
+                                                  'room_id': str(room.id)})
+            else:
+                if chat:
                     recipient = room.users.exclude(id=request.user.id).first()
                     chat_name = recipient.username
-                chats_with_recipients.append({'chat': chat, 'chat_name': chat_name,
-                                              'room_id': str(room.id)})
+                    chats_with_recipients.append({'chat': chat, 'chat_name': chat_name,
+                                                  'room_id': str(room.id)})
 
-        chats_with_recipients.sort(key=lambda x: x['chat'].timestamp, reverse=True)
+        chats_with_recipients.sort(key=lambda x: x['chat'].timestamp if x['chat'] else timezone.now(), reverse=True)
         return render(request, 'chatrooms/chats.html', {'chats_with_recipients': chats_with_recipients})
-
 
 
 class Room(LoginRequiredMixin, View):
@@ -105,3 +110,7 @@ class CreateGroupChatView(LoginRequiredMixin, View):
                     room.users.add(user)
             return redirect(reverse('room', args=[str(room.id)]))
         return render(request, 'chatrooms/create_group_chat.html', {'form': form})
+
+
+def calendar_view(request):
+    return render(request, 'chatrooms/calendar.html')

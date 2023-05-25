@@ -143,3 +143,52 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+const pollSocket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/poll/'
+    + roomUuid
+    + '/'
+);
+
+pollSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    const pollArea = document.querySelector('#poll-area');
+    const pollElement = document.createElement('div');
+
+    if (data.type === 'new_poll') {
+        const questionElement = document.createElement('h3');
+        questionElement.innerText = data.question;
+        pollElement.appendChild(questionElement);
+
+        data.options.forEach(option => {
+            const optionElement = document.createElement('button');
+            optionElement.innerText = option.text;
+            const voteCountElement = document.createElement('span');
+            voteCountElement.innerText = ' (0 votes)';
+            optionElement.appendChild(voteCountElement);
+
+            optionElement.addEventListener('click', function() {
+                pollSocket.send(JSON.stringify({
+                    'type': 'vote',
+                    'user_id': loggedInUserId,
+                    'poll_id': data.poll_id,
+                    'option_id': option.id
+                }));
+            });
+            pollElement.appendChild(optionElement);
+        });
+    }
+
+    else if (data.type === 'new_vote') {
+        const optionElement = pollElement.querySelector(`[data-option-id="${data.option_id}"]`);
+        const voteCountElement = optionElement.querySelector('span');
+        const currentVoteCount = parseInt(voteCountElement.innerText.match(/\d+/)[0]);
+        voteCountElement.innerText = ` (${currentVoteCount + 1} votes)`;
+    }
+
+    pollArea.appendChild(pollElement);
+};
+
+

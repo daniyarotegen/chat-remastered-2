@@ -6,13 +6,13 @@
 <nav class="navbar navbar-light bg-light sticky-top navbar-room">
     <div class="container-fluid d-flex justify-content-between">
         <div class="navbar-nav">
-            <a class="nav-link" href="{% url 'event_list_nav' year=prev_year month=prev_month %}">Previous Month</a>
+            <a class="nav-link" href="{% url 'event_list_nav' year=prev_year month=prev_month %}">< Previous</a>
         </div>
         <div class="navbar-nav">
             <a class="nav-link" href="{% url 'event_create' %}">Create New Event</a>
         </div>
         <div class="navbar-nav">
-            <a class="nav-link" href="{% url 'event_list_nav' year=next_year month=next_month %}">Next Month</a>
+            <a class="nav-link" href="{% url 'event_list_nav' year=next_year month=next_month %}">Next ></a>
         </div>
     </div>
 </nav>
@@ -25,14 +25,15 @@
             <h2>{{ month_name }} {{ year }}</h2>
         </div>
         <div class="row">
-            <div class="col">Mon</div>
-            <div class="col">Tue</div>
-            <div class="col">Wed</div>
-            <div class="col">Thu</div>
-            <div class="col">Fri</div>
-            <div class="col">Sat</div>
-            <div class="col">Sun</div>
+            <div class="col" style="font-size: 14px;">Mon</div>
+            <div class="col" style="font-size: 14px;">Tue</div>
+            <div class="col" style="font-size: 14px;">Wed</div>
+            <div class="col" style="font-size: 14px;">Thu</div>
+            <div class="col" style="font-size: 14px;">Fri</div>
+            <div class="col" style="font-size: 14px;">Sat</div>
+            <div class="col" style="font-size: 14px;">Sun</div>
         </div>
+
         {% for week in month %}
         <div class="row">
             {% for day in week %}

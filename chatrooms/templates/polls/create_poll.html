@@ -1,7 +1,32 @@
+{% extends "chatrooms/base.html" %}
 {% load bootstrap5 %}
-<form method="post">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <input type="text" name="options" placeholder="Option text">
-    <input type="submit" value="Create Poll">
-</form>
+{% block content %}
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <h2>Poll Options</h2>
+        {{ formset.management_form }}
+        {% for option_form in formset %}
+            <div class="form-option">
+                {% bootstrap_form option_form %}
+            </div>
+        {% endfor %}
+        <input type="submit" value="Create Poll">
+    </form>
+    <button id="add-option" type="button">Add option</button>
+</div>
+
+<script>
+    document.querySelector("#add-option").addEventListener('click', function() {
+        let formOption = document.querySelector(".form-option");
+        let newOption = formOption.cloneNode(true);
+        let formCount = document.querySelector("#id_form-TOTAL_FORMS");
+        let idx = parseInt(formCount.value);
+        newOption.innerHTML = newOption.innerHTML.replace(/__prefix__/g, idx);
+        formCount.value = idx + 1;
+        formOption.parentNode.insertBefore(newOption, formOption);
+    });
+</script>
+
+{% endblock %}

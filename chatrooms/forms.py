@@ -6,7 +6,8 @@ from .models import File
 class GroupChatForm(forms.Form):
     name = forms.CharField(max_length=255)
     description = forms.CharField(widget=forms.Textarea, required=False)
-    users = forms.ModelMultipleChoiceField(queryset=User.objects.none())
+    users = forms.ModelMultipleChoiceField(queryset=User.objects.none(),
+                                           widget=forms.CheckboxSelectMultiple)
 
 
 class FileForm(forms.ModelForm):

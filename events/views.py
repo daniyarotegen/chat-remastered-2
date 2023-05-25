@@ -22,19 +22,10 @@ class EventListView(ListView):
         _, days_in_month = monthrange(year, month)
         prev_year = year - 1 if month == 1 else year
         prev_month = month - 1 if month != 1 else 12
-        _, days_in_prev_month = monthrange(prev_year, prev_month)
         next_year = year + 1 if month == 12 else year
         next_month = month + 1 if month != 12 else 1
-        _, days_in_next_month = monthrange(next_year, next_month)
         month_calendar = calendar.monthcalendar(year, month)
-        for i, day in enumerate(month_calendar[0]):
-            if day == 0:
-                month_calendar[0][i] = days_in_prev_month - len([d for d in month_calendar[0] if d == 0]) + i + 1
-        next_month_day = 1
-        for i, day in enumerate(month_calendar[-1]):
-            if day == 0:
-                month_calendar[-1][i] = next_month_day
-                next_month_day += 1
+
         context['month'] = month_calendar
         context['days_in_month'] = days_in_month
         context['month_number'] = month

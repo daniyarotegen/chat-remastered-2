@@ -1,6 +1,7 @@
 {% extends "chatrooms/base.html" %}
 {% load bootstrap5 %}
 {% load static %}
+
 {% block navbar %}
 <nav class="navbar navbar-light bg-light sticky-top navbar-room">
     <div class="container-fluid d-flex justify-content-between">
@@ -16,6 +17,7 @@
     </div>
 </nav>
 {% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="container">
@@ -37,14 +39,22 @@
             <div class="col day">
                 {% if day < 1 or day > days_in_month %}
                 {% else %}
-                <a href="{% url 'event_day' year month_number day %}">{{ day }}</a>
+                <a href="{% url 'event_day' year month_number day %}">
+                    <span>{{ day }}</span>
+                    <div class="event-dots">
+                        {% for event in events %}
+                        {% if event.start_datetime.day == day %}
+                        <span class="dot"></span>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </a>
                 {% endif %}
             </div>
             {% endfor %}
         </div>
         {% endfor %}
     </div>
-
 
     {% for event in events %}
     <div class="card mb-3">
@@ -55,13 +65,13 @@
         </div>
     </div>
     {% endfor %}
-
 </div>
 {% endblock %}
 
 {% block footer %}
 {% include "chatrooms/footer.html" %}
 {% endblock %}
+
 {% block extrajs %}
 <script src="{% static 'events.css' %}"></script>
 {% endblock %}

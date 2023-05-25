@@ -1,15 +1,24 @@
 {% extends "chatrooms/base.html" %}
-
 {% load bootstrap5 %}
 
 {% block content %}
 <div class="container">
     <h1>{{ event.title }}</h1>
     <p>{{ event.description }}</p>
-    <p>{{ event.start_date }}</p>
-    <p>{{ event.start_time }}</p>
+    <p>Organized by: {{ event.organizer.username }}</p>
+    <p>Attendees: {% for attendee in event.attendees.all %}{{ attendee.username }},{% endfor %}</p>
+    <p>{{ event.start_datetime }}</p>
     <p>{{ event.venue }}</p>
+    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="event-image">
     <a href="{% url 'event_update' event.pk %}" class="btn btn-primary">Update</a>
     <a href="{% url 'event_delete' event.pk %}" class="btn btn-danger">Delete</a>
+    {% if user.is_authenticated %}
+        {% if user not in event.attendees.all %}
+            <form method="post" action="{% url 'event_registration' event.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Register</button>
+            </form>
+        {% endif %}
+    {% endif %}
 </div>
 {% endblock %}

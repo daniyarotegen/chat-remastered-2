@@ -8,7 +8,6 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
-
 from .forms import GroupChatForm, FileForm
 from .models import ChatRoom, Chat
 from django.contrib.auth.models import User

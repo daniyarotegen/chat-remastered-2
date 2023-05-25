@@ -26,6 +26,7 @@ urlpatterns = [
     path("users/", UserListView.as_view(), name="user-list"),
     path('chats/', ChatsView.as_view(), name='chats'),
     path('chat/', include('chatrooms.urls')),
+    path('events/', include('events.urls')),
     path("profile/", ProfileView.as_view(), name="profile"),
     path('create_group_chat/', CreateGroupChatView.as_view(), name='create_group_chat'),
     path('polls/', include('polls.urls')),

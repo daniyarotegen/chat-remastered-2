@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'channels',
     'chatrooms',
     'polls',
+    'events',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

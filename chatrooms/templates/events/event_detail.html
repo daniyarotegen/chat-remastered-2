@@ -1,0 +1,15 @@
+{% extends "chatrooms/base.html" %}
+
+{% load bootstrap5 %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ event.title }}</h1>
+    <p>{{ event.description }}</p>
+    <p>{{ event.start_date }}</p>
+    <p>{{ event.start_time }}</p>
+    <p>{{ event.venue }}</p>
+    <a href="{% url 'event_update' event.pk %}" class="btn btn-primary">Update</a>
+    <a href="{% url 'event_delete' event.pk %}" class="btn btn-danger">Delete</a>
+</div>
+{% endblock %}

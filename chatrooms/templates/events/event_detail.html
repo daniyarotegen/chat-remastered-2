@@ -1,24 +1,44 @@
 {% extends "chatrooms/base.html" %}
 {% load bootstrap5 %}
-
+{% load static %}
+{% block navbar %}
+<nav class="navbar navbar-light bg-light sticky-top navbar-room">
+    <div class="container-fluid d-flex justify-content-between">
+        <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'event_update' event.pk %}">Update Event</a>
+        </div>
+        <div class="navbar-nav">
+            {% if user.is_authenticated %}
+                {% if user not in event.attendees.all %}
+                    <form method="post" action="{% url 'event_registration' event.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-light">Register</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'event_delete' event.pk %}">Delete Event</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
 {% block content %}
 <div class="container">
-    <h1>{{ event.title }}</h1>
-    <p>{{ event.description }}</p>
-    <p>Organized by: {{ event.organizer.username }}</p>
-    <p>Attendees: {% for attendee in event.attendees.all %}{{ attendee.username }},{% endfor %}</p>
-    <p>{{ event.start_datetime }}</p>
-    <p>{{ event.venue }}</p>
-    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="event-image">
-    <a href="{% url 'event_update' event.pk %}" class="btn btn-primary">Update</a>
-    <a href="{% url 'event_delete' event.pk %}" class="btn btn-danger">Delete</a>
-    {% if user.is_authenticated %}
-        {% if user not in event.attendees.all %}
-            <form method="post" action="{% url 'event_registration' event.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success">Register</button>
-            </form>
-        {% endif %}
-    {% endif %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h1 class="card-title">{{ event.title }}</h1>
+            <p class="card-text">{{ event.description }}</p>
+            <p class="card-text">Organized by: {{ event.organizer.username }}</p>
+            <p class="card-text">Attendees: {% for attendee in event.attendees.all %}{{ attendee.username }},{% endfor %}</p>
+            <p class="card-text">Start Date: {{ event.start_datetime }}</p>
+            <p class="card-text">Venue: {{ event.venue }}</p>
+            {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" class="img-fluid rounded event-image">
+            {% else %}
+                <img src="{% static 'event.png' %}" alt="Default Image" class="img-fluid rounded event-image">
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

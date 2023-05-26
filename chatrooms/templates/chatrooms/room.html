@@ -23,6 +23,9 @@
         {% if chat.user.id == request.user.id %}
         <div class="message sender">
             <p class="message-text">{{ chat.content }}</p>
+            {% if "Poll created:" in chat.content and chat.poll %}
+            <a href="{% url 'vote_on_poll' chat.poll.id %}">Vote on this poll</a>
+            {% endif %}
         </div>
         {% else %}
         <div class="message receiver">
@@ -30,16 +33,25 @@
             <small class="username">{{ chat.user.username }}</small>
             {% endif %}
             <p class="message-text">{{ chat.content }}</p>
+            {% if "Poll created:" in chat.content and chat.poll %}
+            <a href="{% url 'vote_on_poll' chat.poll.id %}">Vote on this poll</a>
+            {% endif %}
         </div>
         {% endif %}
         {% endfor %}
     </div>
 </div>
 
+
 <div class="footer">
     <div class="message-input">
         <input type="file" id="file-upload" style="display:none;">
-        <label for="file-upload" class="button">Share a file</label>
+        <label for="file-upload" class="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip"
+                 viewBox="0 0 16 16">
+                <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+            </svg>
+        </label>
         <textarea class="textInput expandable" id="chat-message-input" rows="1"></textarea>
         <button id="emoji-button" class="button" type="button">🙂</button>
         <button class="button" id="chat-message-submit" type="button">
@@ -63,6 +75,7 @@
 <script src="{% static 'room.js' %}">
     var chatLog = document.getElementById('chat-log');
     chatLog.scrollTop = chatLog.scrollHeight;
+
 
 
 </script>

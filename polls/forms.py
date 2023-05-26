@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import formset_factory
+from django.forms import inlineformset_factory
 from .models import Poll, PollOption
 
 
@@ -15,4 +15,5 @@ class PollOptionForm(forms.ModelForm):
         fields = ['option_text']
 
 
-PollOptionFormSet = formset_factory(PollOptionForm, extra=1)
+PollOptionFormSet = inlineformset_factory(Poll, PollOption, form=PollOptionForm, extra=1)
+

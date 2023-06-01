@@ -4,17 +4,13 @@
 {% block navbar %}
 <nav class="navbar navbar-light bg-light sticky-top navbar-profile">
     <div class="container-fluid d-flex justify-content-between">
-        <button class="btn btn-primary" onclick="location.href='{% url 'edit-profile' %}'">Edit Profile</button>
-        <button class="btn btn-primary" onclick="location.href='{% url 'account_logout' %}'">
-            Logout
-        </button>
+        <button class="btn btn-primary" onclick="location.href='{% url 'start-chat' username=user.username %}'">Start Chat</button>
     </div>
 </nav>
 
 {% endblock %}
 {% block content %}
 <div class="container">
-
     <div class="card-body">
         <div class="text-center mb-4">
             {% if user.avatar %}
@@ -24,7 +20,6 @@
             <img src="{% static 'profile.jpg' %}" class="rounded-circle" alt="Profile Picture" width="150" height="150">
             {% endif %}
         </div>
-
         <p><strong>Username:</strong> {{ user.username }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Name:</strong> {{ user.first_name }}</p>
@@ -46,7 +41,6 @@
         {% if user.website %}<p><strong>Website:</strong> <a href="{{ user.website }}">{{ user.website }}</a></p>{% endif %}
         {% if user.social_media_links %}<p><strong>Social Media Links:</strong> {{ user.social_media_links }}</p>{% endif %}
     </div>
-
 </div>
 
 {% endblock %}

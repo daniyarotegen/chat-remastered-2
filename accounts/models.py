@@ -15,8 +15,8 @@ class Profile(AbstractUser):
         ('healthcare', 'Healthcare'),
         ('education', 'Education Services')
     )
-
-    business_sector = models.CharField(choices=BUSINESS_SECTORS, max_length=100)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    business_sector = models.CharField(choices=BUSINESS_SECTORS, max_length=100, null=True, blank=True)
     company = models.CharField(max_length=100, blank=True, null=True)
     expertise = models.CharField(max_length=100, blank=True, null=True)
     resources = models.TextField(blank=True, null=True)

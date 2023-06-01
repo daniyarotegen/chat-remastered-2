@@ -16,8 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import ProfileView, EditProfileView
-from chatrooms.views import UserListView, ChatsView, CreateGroupChatView, calendar_view, FileUploadView
+from accounts.views import ProfileView, EditProfileView, UserListView, UserProfileView
+from chatrooms.views import ChatsView, CreateGroupChatView, calendar_view, FileUploadView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -30,6 +30,7 @@ urlpatterns = [
     path('events/', include('events.urls')),
     path("profile/", ProfileView.as_view(), name="profile"),
     path('profile/edit/', EditProfileView.as_view(), name='edit-profile'),
+    path('user/<str:username>/', UserProfileView.as_view(), name='user-profile'),
     path('create_group_chat/', CreateGroupChatView.as_view(), name='create_group_chat'),
     path('polls/', include('polls.urls')),
     path('calendar/', calendar_view, name='calendar'),

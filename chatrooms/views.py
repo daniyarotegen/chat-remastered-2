@@ -10,7 +10,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from .forms import GroupChatForm, FileForm
 from .models import ChatRoom, Chat
-from django.db.models import Q
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -19,15 +18,6 @@ User = get_user_model()
 class Index(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'chatrooms/index.html')
-
-
-class UserListView(LoginRequiredMixin, View):
-    def get(self, request):
-        q = request.GET.get('q', '')
-        users = User.objects.exclude(id=request.user.id)
-        if q:
-            users = users.filter(Q(username__icontains=q))
-        return render(request, 'chatrooms/user_list.html', {'users': users})
 
 
 class StartChatView(LoginRequiredMixin, View):
@@ -59,21 +49,25 @@ class ChatsView(LoginRequiredMixin, View):
             chat = room.chat_set.order_by('-timestamp').first()
             if room.is_group:
                 chat_name = room.name
+                avatar_url = room.avatar.url if room.avatar else None
                 if chat:
                     chats_with_recipients.append({'chat': chat, 'chat_name': chat_name,
-                                                  'room_id': str(room.id)})
+                                                  'room_id': str(room.id), 'avatar_url': avatar_url})
                 else:
                     chats_with_recipients.append({'chat': None, 'chat_name': chat_name,
-                                                  'room_id': str(room.id)})
+                                                  'room_id': str(room.id), 'avatar_url': avatar_url})
             else:
                 if chat:
                     recipient = room.users.exclude(id=request.user.id).first()
-                    chat_name = recipient.username
+                    chat_name = recipient.first_name + " " + recipient.last_name
+                    avatar_url = recipient.avatar.url if recipient.avatar else None
                     chats_with_recipients.append({'chat': chat, 'chat_name': chat_name,
-                                                  'room_id': str(room.id)})
+                                                  'room_id': str(room.id), 'avatar_url': avatar_url})
 
         chats_with_recipients.sort(key=lambda x: x['chat'].timestamp if x['chat'] else timezone.now(), reverse=True)
         return render(request, 'chatrooms/chats.html', {'chats_with_recipients': chats_with_recipients})
+
+
 
 
 class Room(LoginRequiredMixin, View):
@@ -97,22 +91,24 @@ class CreateGroupChatView(LoginRequiredMixin, View):
         return render(request, 'chatrooms/create_group_chat.html', {'form': form})
 
     def post(self, request):
-        form = GroupChatForm(request.POST)
+        form = GroupChatForm(request.POST, request.FILES)
         form.fields['users'].queryset = User.objects.exclude(id=request.user.id)
         if form.is_valid():
             users = form.cleaned_data['users']
             users = list(users) + [request.user]
             name = form.cleaned_data['name']
             description = form.cleaned_data.get('description', '')
+            avatar = form.cleaned_data.get('avatar', None)
             room, created = ChatRoom.objects.get_or_create(
                 name=name,
-                defaults={'is_group': True, 'description': description}
+                defaults={'is_group': True, 'description': description, 'avatar': avatar}
             )
             if created:
                 for user in users:
                     room.users.add(user)
             return redirect(reverse('room', args=[str(room.id)]))
         return render(request, 'chatrooms/create_group_chat.html', {'form': form})
+
 
 
 def calendar_view(request):

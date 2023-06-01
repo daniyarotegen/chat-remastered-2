@@ -16,9 +16,22 @@
 <div class="user-list-container">
     <div class="list-group">
         {% for user in users %}
-        <a href="{% url 'start-chat' username=user.username %}" class="list-group-item list-group-item-action">
+        <a href="{% url 'user-profile' username=user.username %}" class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ user.username }}</h5>
+                <div class="d-flex align-items-center">
+                  {% if user.avatar %}{% with user.avatar.url as avatar_url %}
+                  <img src="{{ avatar_url }}" class="rounded-circle me-2" alt="Profile Picture" width="50" height="50">
+                  {% endwith %}{% else %}
+                  <img src="{% static 'profile.jpg' %}" class="rounded-circle me-2" alt="Profile Picture" width="50" height="50">
+                  {% endif %}
+                  <h5 class="mb-1">
+                    {% if user.first_name and user.last_name %}
+                        {{ user.first_name }} {{ user.last_name }}
+                    {% else %}
+                        {{ user.username }}
+                    {% endif %}
+                  </h5>
+                </div>
             </div>
         </a>
         {% empty %}

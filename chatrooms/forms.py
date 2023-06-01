@@ -11,6 +11,7 @@ class GroupChatForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea, required=False)
     users = forms.ModelMultipleChoiceField(queryset=User.objects.none(),
                                            widget=forms.CheckboxSelectMultiple)
+    avatar = forms.ImageField(required=False)
 
 
 class FileForm(forms.ModelForm):

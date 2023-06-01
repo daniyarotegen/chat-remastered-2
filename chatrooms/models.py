@@ -26,6 +26,7 @@ class ChatRoom(models.Model):
         default=ChatType.PRIVATE,
     )
     users = models.ManyToManyField('accounts.Profile', through='ChatRoomMembership')
+    avatar = models.ImageField(upload_to='groupchats/', null=True, blank=True)
     is_group = models.BooleanField(default=False)
 
     def is_group_chat(self):

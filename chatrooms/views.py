@@ -10,18 +10,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from .forms import GroupChatForm, FileForm
 from .models import ChatRoom, Chat
-from django.contrib.auth.models import User
 from django.db.models import Q
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Index(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'chatrooms/index.html')
-
-
-class ProfileView(LoginRequiredMixin, View):
-    def get(self, request):
-        return render(request, 'chatrooms/profile.html')
 
 
 class UserListView(LoginRequiredMixin, View):

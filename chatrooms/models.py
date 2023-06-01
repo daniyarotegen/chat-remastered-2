@@ -1,5 +1,4 @@
 import uuid
-from django.contrib.auth.models import User
 from django.db import models
 from enum import Enum
 
@@ -12,7 +11,7 @@ class ChatType(Enum):
 class Chat(models.Model):
     content = models.CharField(max_length=1000)
     timestamp = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE)
     room = models.ForeignKey('ChatRoom', on_delete=models.CASCADE)
     poll = models.ForeignKey('polls.Poll', on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -26,7 +25,7 @@ class ChatRoom(models.Model):
         choices=[(tag.name, tag.value) for tag in ChatType],
         default=ChatType.PRIVATE,
     )
-    users = models.ManyToManyField(User, through='ChatRoomMembership')
+    users = models.ManyToManyField('accounts.Profile', through='ChatRoomMembership')
     is_group = models.BooleanField(default=False)
 
     def is_group_chat(self):
@@ -37,13 +36,13 @@ class ChatRoom(models.Model):
 
 
 class ChatRoomMembership(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE)
     chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class File(models.Model):
     file = models.FileField(upload_to='uploads/')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE)
     chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)

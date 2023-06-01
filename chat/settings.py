@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
 ]
 
 SITE_ID = 1
@@ -154,6 +155,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+AUTH_USER_MODEL = 'accounts.Profile'
 
 LOGIN_REDIRECT_URL = 'user-list'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'user-list'

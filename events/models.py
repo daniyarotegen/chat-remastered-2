@@ -1,6 +1,5 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import User
 
 
 class Event(models.Model):
@@ -9,8 +8,8 @@ class Event(models.Model):
     description = models.TextField(null=True, blank=True)
     start_datetime = models.DateTimeField()
     venue = models.CharField(max_length=255)
-    organizer = models.ForeignKey(User, related_name='organized_events', on_delete=models.CASCADE)
-    attendees = models.ManyToManyField(User, through='EventAttendee')
+    organizer = models.ForeignKey('accounts.Profile', related_name='organized_events', on_delete=models.CASCADE)
+    attendees = models.ManyToManyField('accounts.Profile', through='EventAttendee')
     image = models.ImageField(upload_to='demo/', null=True, blank=True)
 
     def __str__(self):
@@ -18,6 +17,6 @@ class Event(models.Model):
 
 
 class EventAttendee(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)

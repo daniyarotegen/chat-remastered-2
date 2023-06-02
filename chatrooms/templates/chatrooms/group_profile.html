@@ -7,6 +7,11 @@
         <div class="navbar-nav">
             <a class="nav-link" href="{% url 'chats' %}"><- Back</a>
         </div>
+        <div class="navbar-nav">
+            {% if user == groupchat.creator %}
+            <a href="{% url 'edit-group-chat' pk=groupchat.id %}" class="btn btn-secondary">Edit Group Chat</a>
+            {% endif %}
+        </div>
     </div>
 </nav>
 {% endblock %}
@@ -17,9 +22,11 @@
         <p>{{ groupchat.description }}</p>
         <div class="d-flex justify-content-center">
             {% if groupchat.avatar %}
-            <img src="{{ groupchat.avatar.url }}" alt="Group avatar" class="img-fluid rounded-circle" width="150" height="150">
+            <img src="{{ groupchat.avatar.url }}" alt="Group avatar" class="img-fluid rounded-circle" width="150"
+                 height="150">
             {% else %}
-            <img src="{% static 'groupchat.png' %}" alt="Group avatar" class="img-fluid rounded-circle" width="150" height="150">
+            <img src="{% static 'groupchat.png' %}" alt="Group avatar" class="img-fluid rounded-circle" width="150"
+                 height="150">
             {% endif %}
         </div>
         <h2>Members</h2>

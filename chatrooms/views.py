@@ -1,6 +1,6 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
 from .forms import GroupChatForm, FileForm
 from .models import ChatRoom, Chat
 from django.contrib.auth import get_user_model
@@ -45,6 +45,7 @@ class StartChatView(LoginRequiredMixin, View):
 class ChatsView(LoginRequiredMixin, View):
     def get(self, request):
         chatrooms = ChatRoom.objects.filter(users=request.user).distinct()
+        print(f"Chatrooms are {chatrooms}")
         chats_with_recipients = []
         for room in chatrooms:
             chat = room.chat_set.order_by('-timestamp').first()
@@ -83,7 +84,6 @@ class Room(LoginRequiredMixin, View):
                        'is_group_chat': room.is_group, 'form': form, 'room': room})
 
 
-
 class GroupChatProfileView(LoginRequiredMixin, TemplateView):
     template_name = "chatrooms/group_profile.html"
 
@@ -112,13 +112,47 @@ class CreateGroupChatView(LoginRequiredMixin, View):
             avatar = form.cleaned_data.get('avatar', None)
             room, created = ChatRoom.objects.get_or_create(
                 name=name,
-                defaults={'is_group': True, 'description': description, 'avatar': avatar}
+                defaults={'is_group': True, 'description': description, 'avatar': avatar, 'creator': request.user}
             )
             if created:
                 for user in users:
                     room.users.add(user)
             return redirect(reverse('room', args=[str(room.id)]))
         return render(request, 'chatrooms/create_group_chat.html', {'form': form})
+
+
+class EditGroupChatView(LoginRequiredMixin, UpdateView):
+    model = ChatRoom
+    template_name = 'chatrooms/edit_group_chat.html'
+    form_class = GroupChatForm
+
+    def get_object(self, queryset=None):
+        groupchat = super().get_object()
+        if not groupchat.creator == self.request.user:
+            raise Http404()
+        return groupchat
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['users'].queryset = User.objects.all()
+        form.fields['users'].initial = self.object.users.all()
+        return form
+
+    def form_valid(self, form):
+        groupchat = form.save(commit=False)
+        if groupchat.creator != self.request.user:
+            return HttpResponseForbidden()
+
+        users = form.cleaned_data['users']
+        if not any(user.id == self.request.user.id for user in users):
+            users = list(users) + [self.request.user]
+        print(f"Users are {users}")
+        groupchat.users.set(users)
+        groupchat.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('group-profile', args=[str(self.object.id)])
 
 
 def calendar_view(request):

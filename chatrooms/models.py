@@ -28,6 +28,7 @@ class ChatRoom(models.Model):
     users = models.ManyToManyField('accounts.Profile', through='ChatRoomMembership')
     avatar = models.ImageField(upload_to='groupchats/', null=True, blank=True)
     is_group = models.BooleanField(default=False)
+    creator = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name='created_groups')
 
     def is_group_chat(self):
         return self.is_group

@@ -1,0 +1,22 @@
+{% extends "chatrooms/base.html" %}
+{% load bootstrap5 %}
+{% load static %}
+{% block navbar %}
+<nav class="navbar navbar-light bg-light sticky-top navbar-room">
+    <div class="container-fluid d-flex justify-content-between">
+        <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'chats' %}"><- Back</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Edit Group Chat</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+{% endblock %}

@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 from django.db.models import Q
-
+from django.shortcuts import redirect
 from accounts.forms import ProfileForm
 
 User = get_user_model()
@@ -21,6 +21,8 @@ class UserListView(LoginRequiredMixin, View):
 class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, username):
         user = get_user_model().objects.get(username=username)
+        if request.user.username == username:
+            return redirect('profile')
         return render(request, 'profiles/user_profile.html', {'user': user})
 
 

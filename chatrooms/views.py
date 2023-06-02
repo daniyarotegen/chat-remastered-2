@@ -1,13 +1,14 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
 from .forms import GroupChatForm, FileForm
 from .models import ChatRoom, Chat
 from django.contrib.auth import get_user_model
@@ -68,8 +69,6 @@ class ChatsView(LoginRequiredMixin, View):
         return render(request, 'chatrooms/chats.html', {'chats_with_recipients': chats_with_recipients})
 
 
-
-
 class Room(LoginRequiredMixin, View):
     def get(self, request, room_uuid):
         room = ChatRoom.objects.filter(id=room_uuid).first()
@@ -80,8 +79,20 @@ class Room(LoginRequiredMixin, View):
         form = FileForm()
 
         return render(request, 'chatrooms/room.html',
-                      {'room_name': room.name, 'room_id': str(room.id), 'chats': chats, 'is_group_chat': room.is_group,
-                       'form': form})
+                      {'room_name': room.name, 'room_id': str(room.id), 'chats': chats,
+                       'is_group_chat': room.is_group, 'form': form, 'room': room})
+
+
+
+class GroupChatProfileView(LoginRequiredMixin, TemplateView):
+    template_name = "chatrooms/group_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        group_id = kwargs.get('group_id')
+        groupchat = get_object_or_404(ChatRoom, id=group_id)
+        context['groupchat'] = groupchat
+        return context
 
 
 class CreateGroupChatView(LoginRequiredMixin, View):
@@ -108,7 +119,6 @@ class CreateGroupChatView(LoginRequiredMixin, View):
                     room.users.add(user)
             return redirect(reverse('room', args=[str(room.id)]))
         return render(request, 'chatrooms/create_group_chat.html', {'form': form})
-
 
 
 def calendar_view(request):

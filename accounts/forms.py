@@ -8,7 +8,8 @@ class ProfileForm(forms.ModelForm):
         model = get_user_model()
         fields = ['avatar', 'first_name', 'last_name', 'business_sector', 'company', 'expertise', 'resources',
                   'achievements', 'goals', 'requests', 'city', 'date_of_birth', 'hobbies', 'education',
-                  'interesting_facts', 'marital_status', 'phone_number', 'website', 'social_media_links']
+                  'interesting_facts', 'marital_status', 'phone_number', 'website', 'whatsapp_url',
+                  'telegram_url', 'instagram_url', 'twitter_url', 'facebook_url', 'vk_url', 'tiktok_url']
 
 
 class CustomSignupForm(SignupForm):

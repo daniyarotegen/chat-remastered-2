@@ -250,3 +250,9 @@ a:hover {
     height: 100%;
 }
 
+.svg-icon svg {
+    width: 2.7rem;
+    height: auto;
+}
+
+

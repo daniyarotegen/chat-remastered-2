@@ -1,5 +1,6 @@
 {% extends "chatrooms/base.html" %}
 {% load humanize custom_filters %}
+{% load static %}
 {% block navbar %}
 <nav class="navbar navbar-light bg-light sticky-top">
     <div class="container-fluid d-flex justify-content-end">
@@ -17,8 +18,12 @@
         <a href="{% url 'room' room_uuid=item.room_id %}" class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
                 <div class="d-flex align-items-center">
-                    <img src="{{ item.avatar_url }}" class="rounded-circle mr-2" style="width: 50px; height: 50px;"
-                         alt="Avatar">
+                    {% if item.avatar_url %}
+                    <img src="{{ item.avatar_url }}" class="rounded-circle" alt="Profile Picture" width="50"
+                         height="50">
+                    {% else %}
+                    <img src="{% static 'groupchat.png' %}" class="rounded-circle" alt="Profile Picture" width="50" height="50">
+                    {% endif %}
                     <div>
                         <h5 class="mb-1">{{ item.chat_name }}</h5>
                         {% if item.chat %}

@@ -1,0 +1,55 @@
+{% load static %}
+<div class="container">
+    <div class="card-body">
+        <div class="text-center mb-4">
+            {% if user.avatar %}
+            <img src="{{ user.avatar.url }}" class="rounded-circle" alt="Profile Picture" width="150"
+                 height="150">
+            {% else %}
+            <img src="{% static 'profile.jpg' %}" class="rounded-circle" alt="Profile Picture" width="150" height="150">
+            {% endif %}
+        </div>
+        <div class="text-center mb-4">
+            {% if user.whatsapp_url %}
+            <a href="{{ user.whatsapp_url }}"><span class="svg-icon">{% include 'icons/whatsapp.html' %}</span></a>
+            {% endif %}
+            {% if user.telegram_url %}
+            <a href="{{ user.telegram_url }}"><span class="svg-icon">{% include 'icons/telegram.html' %}</span></a>
+            {% endif %}
+            {% if user.instagram_url %}
+            <a href="{{ user.instagram_url }}"><span class="svg-icon">{% include 'icons/instagram.html' %}</span></a>
+            {% endif %}
+            {% if user.twitter_url %}
+            <a href="{{ user.twitter_url }}"><span class="svg-icon">{% include 'icons/twitter.html' %}</span></a>
+            {% endif %}
+            {% if user.facebook_url %}
+            <a href="{{ user.facebook_url }}"><span class="svg-icon">{% include 'icons/facebook.html' %}</span></a>
+            {% endif %}
+            {% if user.vk_url %}
+            <a href="{{ user.vk_url }}"><span class="svg-icon">{% include 'icons/vk.html' %}</span></a>
+            {% endif %}
+            {% if user.tiktok_url %}
+            <a href="{{ user.tiktok_url }}"><span class="svg-icon">{% include 'icons/tiktok.html' %}</span></a>
+            {% endif %}
+        </div>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Name:</strong> {{ user.first_name }}</p>
+        <p><strong>Surname:</strong> {{ user.last_name }}</p>
+        {% if user.business_sector %}<p><strong>Business Sector:</strong> {{ user.business_sector }}</p>{% endif %}
+        {% if user.company %}<p><strong>Company:</strong> {{ user.company }}</p>{% endif %}
+        {% if user.expertise %}<p><strong>Expertise:</strong> {{ user.expertise }}</p>{% endif %}
+        {% if user.resources %}<p><strong>Resources:</strong> {{ user.resources }}</p>{% endif %}
+        {% if user.achievements %}<p><strong>Achievements:</strong> {{ user.achievements }}</p>{% endif %}
+        {% if user.goals %}<p><strong>Goals:</strong> {{ user.goals }}</p>{% endif %}
+        {% if user.requests %}<p><strong>Requests:</strong> {{ user.requests }}</p>{% endif %}
+        {% if user.city %}<p><strong>City:</strong> {{ user.city }}</p>{% endif %}
+        {% if user.date_of_birth %}<p><strong>Date of Birth:</strong> {{ user.date_of_birth }}</p>{% endif %}
+        {% if user.hobbies %}<p><strong>Hobbies:</strong> {{ user.hobbies }}</p>{% endif %}
+        {% if user.education %}<p><strong>Education:</strong> {{ user.education }}</p>{% endif %}
+        {% if user.interesting_facts %}<p><strong>Interesting Facts:</strong> {{ user.interesting_facts }}</p>{% endif %}
+        {% if user.marital_status %}<p><strong>Marital Status:</strong> {{ user.marital_status }}</p>{% endif %}
+        {% if user.phone_number %}<p><strong>Phone Number:</strong> {{ user.phone_number }}</p>{% endif %}
+        {% if user.website %}<p><strong>Website:</strong> <a href="{{ user.website }}">{{ user.website }}</a></p>{% endif %}
+    </div>
+</div>
